@@ -172,8 +172,13 @@ class queen(base):
             self.white = False
 
     def restrict(self, x, y, pieces_list):
+        
         rookrestrict, bishoprestrict = rook(self.rect.x, self.rect.y, self.win, self.white,'rook'), bishop(self.rect.x, self.rect.y, self.win, self.white,'bishop')
-        return rookrestrict.restrict(x, y, pieces_list) and bishoprestrict.restrict(x, y, pieces_list)
+        if abs(self.rect.x-x)==abs(self.rect.y-y):
+            return bishoprestrict.restrict(x,y,pieces_list)
+        else:
+            return rookrestrict.restrict(x,y,pieces_list)
+        #return rookrestrict.restrict(x, y, pieces_list) or bishoprestrict.restrict(x, y, pieces_list)
 
     def rules(self,x,y, pieces_list):
         rookRules, bishoprules = rook(self.rect.x, self.rect.y, self.win, self.white,'rook'), bishop(self.rect.x, self.rect.y, self.win, self.white,'bishop')
@@ -208,13 +213,13 @@ class king(base):
                     if piece.rules(x,y,pieces_list) and piece.restrict(x,y,pieces_list):
                         print("False for ", piece)
                         return False
-            if x == piece.rect.x and y == piece.rect.y:
-                withoutPiece = pieces_list[:index] + pieces_list[index+1:]
-                for other_piece in withoutPiece:
-                    if other_piece is not None and other_piece.white != self.white:
-                        if other_piece.rules(x, y, withoutPiece) and other_piece.restrict(x, y, withoutPiece):
-                            print("False for", other_piece)
-                            return False
+                if x == piece.rect.x and y == piece.rect.y:
+                    withoutPiece = pieces_list[:index] + pieces_list[index+1:]
+                    for other_piece in withoutPiece:
+                        if other_piece is not None and other_piece.white != self.white:
+                            if other_piece.rules(x, y, withoutPiece) and other_piece.restrict(x, y, withoutPiece):
+                                print("False for", other_piece)
+                                return False
         return True
     
     def rules(self, x, y, pieces_list):
