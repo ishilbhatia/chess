@@ -166,9 +166,5 @@ while running:
         if piece !=None:
             piece.draw()
     
-    for piece in pieces:
-        if piece!=None:
-            print(piece.moved)
-
     pygame.display.update()
 pygame.quit()
