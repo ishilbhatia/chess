@@ -73,6 +73,9 @@ while running:
         if event.type == pygame.QUIT:
             running=False
     drawBoard()
+    for piece in pieces:
+        if piece!=None:
+            piece.moved=False
     for pawny in pawns:
         if pawny.__getattribute__('dragy')==7*ss and pawny.__getattribute__('type')=='pawn':
             pawny=queen(pawny.__getattribute__('dragx'),0,screen,False,'queen')
@@ -139,12 +142,23 @@ while running:
                 pieces[i].highlight()
                 pieces[i].click(pieces)
                 pieces[i].draw()
+                if pieces[i].moved:
+                    #print(pieces[i].moved)
+                    #time.sleep(0.5)
+                    if pieces[i].check(pieces)==False:
+                        pieces[i].rect.x=pieces[i].oldx
+                        pieces[i].rect.y=pieces[i].oldy
+                        pieces[i].draw()
+                        break
+                    pieces[i].moved=False
                 if pieces[i].turn:
                     for x in range(len(pieces)):
                         if (i != x) and pieces[x] != None:
                             if (pieces[i].rect.y == pieces[x].rect.y) and (pieces[i].rect.x == pieces[x].rect.x):
                                 pieces[x] = None
                                 pieces[i].turn = False
+                                
+
     for i in pieces:
         if i != None:
             i.turn = False
@@ -152,7 +166,9 @@ while running:
         if piece !=None:
             piece.draw()
     
-    #print (move)
+    for piece in pieces:
+        if piece!=None:
+            print(piece.moved)
 
     pygame.display.update()
 pygame.quit()

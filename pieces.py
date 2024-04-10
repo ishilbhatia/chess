@@ -16,6 +16,9 @@ class base():
         self.selected = False
         self.move = False
         self.turn = False
+        self.moved=False
+        self.oldx=x
+        self.oldy=y
         self.image()
         self.type=type
     def image(self):
@@ -39,8 +42,11 @@ class base():
         if self.selected and not self.move:
             if pygame.mouse.get_pressed()[0] and not (pygame.Rect.collidepoint(self.rect, pygame.mouse.get_pos())):
                 mousex, mousey = get_coords(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-                if self.rules(mousex, mousey, pieces_list) and self.restrict(mousex, mousey, pieces_list) and self.check(pieces_list):
+                if self.rules(mousex, mousey, pieces_list) and self.restrict(mousex, mousey, pieces_list):
+                    self.oldx=self.rect.x
+                    self.oldy=self.rect.y
                     self.rect.x, self.rect.y = mousex, mousey
+                    self.moved=True
                     self.move = True
                     self.turn = True
 
@@ -62,8 +68,9 @@ class base():
         for piece in pieces_list:
             if piece!=None:
                 if piece.rules(k.rect.x,k.rect.y,pieces_list) and piece.restrict(k.rect.x,k.rect.y,pieces_list):
-                    pygame.draw.rect(self.win, (255, 0, 0), (self.dragx, self.dragy, square_size, square_size))
-                    print("check")
+                    #if piece.type=='king':
+                    pygame.draw.rect(k.win, (255, 0, 0), (k.dragx, k.dragy, square_size, square_size))
+                    #print("check")
                     return False
         return True
 
