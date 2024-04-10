@@ -77,10 +77,10 @@ while running:
         if piece!=None:
             piece.moved=False
     for pawny in pawns:
-        if pawny.__getattribute__('dragy')==7*ss and pawny.__getattribute__('type')=='pawn':
-            pawny=queen(pawny.__getattribute__('dragx'),0,screen,False,'queen')
+        if pawny.rect.y==7*ss and pawny.type=='pawn':
+            pawny=queen(pawny.rect.x,0,screen,False,'queen')
     
-        if pawny.__getattribute__('dragy')==0 and pawny.__getattribute__('type')=='pawn':
+        if pawny.rect.y==0 and pawny.type=='pawn':
             b=0
             c=0
             for i in range(len(pieces)):
@@ -97,7 +97,7 @@ while running:
             pawny.dragy=-1*ss
             pawny.draw()
             
-            pawny=queen(pawny.__getattribute__('dragx'),0,screen,True,'queen')
+            pawny=queen(pawny.rect.x,0,screen,True,'queen')
             
             #pieces[c]=pawny
             pieces.append(pawny)

@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-
+import time
 from utils import *
 from utils import *
 
@@ -49,6 +49,7 @@ class base():
                     self.moved=True
                     self.move = True
                     self.turn = True
+                    time.sleep(0.1)
 
         if self.move and self.selected:
             if not pygame.mouse.get_pressed()[0]:# and not pygame.Rect.collidepoint(self.rect, pygame.mouse.get_pos()):
@@ -245,49 +246,71 @@ class pawn(base):
         return True
     def rules(self,x,y, pieces_list):
         #print(self.dragx,self.dragy,x,y)
+        cap=False
+        for piece in pieces_list:
+            if piece!=None:
+                if x==piece.rect.x and y==piece.rect.y and piece.white!=self.white and piece.type!='king':
+                    cap=True
+                    #print(piece.type,piece.white,cap)
+            
         if self.white:
-            if self.dragy==1*square_size or self.dragy==6*square_size:
-                if ((self.dragy-y<=2*square_size and self.dragx==x) and not((x==self.dragx) and (y==self.dragy))):
-                    if self.checkColor(x, y, pieces_list):
-                        for i in pieces_list:
-                            if i != None:
-                                if (i.rect.x == x) and (i.rect.y == y):
-                                    if i.white == self.white:
-                                        return False 
+            if cap:
+                #print("cap")
+                if y-self.rect.y==-1*square_size and abs(x-self.rect.x)==1*square_size:
+                    #print("cap")
                     return True
                 else:
+                    #print(y,self.rect.y)
                     return False
             else:
-                if ((self.dragy-y==1*square_size and self.dragx==x) and not((x==self.dragx) and (y==self.dragy))):
-                    #add anathor if for checking valid moves(respective to other pieces on board)
-                    if self.checkColor(x, y, pieces_list):
-                        for i in pieces_list:
-                            if i != None:
-                                if (i.rect.x == x) and (i.rect.y == y):
-                                    if i.white == self.white:
-                                        return False 
-                    return True
-                return False
+                if self.dragy==1*square_size or self.dragy==6*square_size:
+                    if ((self.dragy-y<=2*square_size and self.dragx==x) and not((x==self.dragx) and (y==self.dragy))):
+                        if self.checkColor(x, y, pieces_list):
+                            for i in pieces_list:
+                                if i != None:
+                                    if (i.rect.x == x) and (i.rect.y == y):
+                                        if i.white == self.white:
+                                            return False 
+                        return True
+                    else:
+                        return False
+                else:
+                    if ((self.dragy-y==1*square_size and self.dragx==x) and not((x==self.dragx) and (y==self.dragy))):
+                        #add anathor if for checking valid moves(respective to other pieces on board)
+                        if self.checkColor(x, y, pieces_list):
+                            for i in pieces_list:
+                                if i != None:
+                                    if (i.rect.x == x) and (i.rect.y == y):
+                                        if i.white == self.white:
+                                            return False 
+                        return True
+                    return False
         else:
-            if self.dragy==1*square_size or self.dragy==6*square_size:
-                if ((self.dragy-y>=-2*square_size and self.dragx==x) and not((x==self.dragx) and (y==self.dragy))):
-                    if self.checkColor(x, y, pieces_list):
-                        for i in pieces_list:
-                            if i != None:
-                                if (i.rect.x == x) and (i.rect.y == y):
-                                    if i.white == self.white:
-                                        return False 
+            if cap:
+                if y-self.rect.y==1*square_size and abs(x-self.rect.x)==1*square_size:
                     return True
                 else:
                     return False
             else:
-                if ((self.dragy-y==-1*square_size and self.dragx==x) and not((x==self.dragx) and (y==self.dragy))):
-                    #add anathor if for checking valid moves(respective to other pieces on board)
-                    if self.checkColor(x, y, pieces_list):
-                        for i in pieces_list:
-                            if i != None:
-                                if (i.rect.x == x) and (i.rect.y == y):
-                                    if i.white == self.white:
-                                        return False 
-                    return True
-                return False
+                if self.dragy==1*square_size or self.dragy==6*square_size:
+                    if ((self.dragy-y>=-2*square_size and self.dragx==x) and not((x==self.dragx) and (y==self.dragy))):
+                        if self.checkColor(x, y, pieces_list):
+                            for i in pieces_list:
+                                if i != None:
+                                    if (i.rect.x == x) and (i.rect.y == y):
+                                        if i.white == self.white:
+                                            return False 
+                        return True
+                    else:
+                        return False
+                else:
+                    if ((self.dragy-y==-1*square_size and self.dragx==x) and not((x==self.dragx) and (y==self.dragy))):
+                        #add anathor if for checking valid moves(respective to other pieces on board)
+                        if self.checkColor(x, y, pieces_list):
+                            for i in pieces_list:
+                                if i != None:
+                                    if (i.rect.x == x) and (i.rect.y == y):
+                                        if i.white == self.white:
+                                            return False 
+                        return True
+                    return False
